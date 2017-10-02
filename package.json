@@ -28,6 +28,8 @@
     "cookie-parser": "^1.4.3",
     "core-js": "^2.4.1",
     "express-session": "^1.15.5",
+    "jsonwebtoken": "^8.0.1",
+    "mongodb": "^2.2.31",
     "mongoose": "^4.11.10",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",

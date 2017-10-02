@@ -96,4 +96,5 @@ UserSchema.pre('save', function(next: Function) {
   user.auth.secretKey2FA = secretKey;
 });
 
+mongoose.connect('mongodb://Tormod:17Rising98@ds149874.mlab.com:49874/ecomm-dev');
 export const User = mongoose.model<IUser>('User', UserSchema);

@@ -4,6 +4,7 @@ import { platformServer, renderModuleFactory } from '@angular/platform-server';
 import { enableProdMode } from '@angular/core';
 import { AppServerModuleNgFactory } from '../dist/ngfactory/src/app/app.server.module.ngfactory';
 import * as express from 'express';
+import * as mongoose from 'mongoose';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 import { apiRouter } from './api-routes';
@@ -13,6 +14,7 @@ const PORT = 4000;
 enableProdMode();
 
 const app = express();
+mongoose.connect('mongodb://Tormod:17Rising98@ds149874.mlab.com:49874/ecomm-dev');
 
 const template = readFileSync(join(__dirname, '..', 'dist', 'index.html')).toString();
 

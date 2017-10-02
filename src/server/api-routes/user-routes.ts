@@ -1,37 +1,70 @@
 import { express } from 'express';
-import { User } from '../models/user';
+import { User } from '../models';
 
 export const userRouter = express.Router();
 
-// READ one user from the database
-userRouter.get('/', (req, res, next) => {
-  const user = User.findById(req.body.userId);
-  res.status(200).toJson(user).send('Success');
-  next();
+// CREATE new user
+userRouter.post('/register', (req, res) => {
+  const newUser = new User();
+  newUser.details.firstName = req.user.firstName;
+  newUser.details.lastName = req.user.lastName;
+  newUser.details.userName = req.user.userName;
+  newUser.details.email = req.user.email;
+  newUser.details.addressShip = req.user.addressShip;
+  newUser.details.addressBill = req.user.addressBill;
+  newUser.auth.emailRecovery = req.user.emailRecovery;
+  newUser.auth.password = req.user.password;
+  newUser.auth.secretKey2FA = req.user.twoStep;
+  newUser.auth.lastLogin = req.user.lastLogin;
+  newUser.auth.loginAttempts = req.user.loginAttempts;
+  newUser.auth.acctLocked = req.user.acctLocked;
+
+  newUser.save((err, result) => {
+    if (err) {
+      return res.status(500).json({
+        msg: 'Failed to create user',
+        err: err
+      });
+    }
+    res.status(201).json({
+      msg: 'New user created',
+      obj: result
+    });
+  });
+});
+
+// RETRIEVE one user from the database
+userRouter.get('/:id', (req, res) => {
+  const user = User.findById(req.params.userId);
+  return res.status(200).toJson(user);
 });
 
 // UPDATE an existing user
-userRouter.put('/', (req, res, next) => {
+userRouter.put('/', (req, res) => {
   User.findByIdAndUpdate(req.body.userId, req.body.user, (err, updatedUser) => {
     if (err) {
-      console.error('An error occurred updating the user', err);
-      res.status(400).send({msg: 'Sorry, user could not be updated.'});
+      return res.status(500).json({
+        msg: 'Failed to update user',
+        err: err
+      });
     }
-    res.status(200).toJson(updatedUser).send('User updated successfully.');
+    return res.status(200).toJson(updatedUser);
   });
-  next();
 });
 
 // DELETE an existing user account
-userRouter.delete('/', (req, res, next) => {
+userRouter.delete('/', (req, res) => {
   User.findByIdAndRemove(req.body.userId, (err) => {
     if (err) {
-      console.error('An error occurred deleting the user', err);
-      res.status(400).send('User could not be deleted');
+      return res.status(500).json({
+        msg: 'Failed to delete user',
+        err: err
+      });
     }
-    res.status(200).send('User successfully deleted');
+    return res.status(200).json({
+      msg: 'User successfully deleted'
+    });
   });
-  next();
 });
 
 

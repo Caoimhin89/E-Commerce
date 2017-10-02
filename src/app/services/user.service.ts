@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { IAppUser } from '../app-interfaces';
 import { Observable } from 'rxjs/Observable';
+import { jwt } from 'jsonwebtoken';
 import 'rxjs/Rx';
 
 @Injectable()
 export class UserService {
+  headers = new HttpHeaders({'Content-Type': 'application/json'});
 
   constructor(private http: HttpClient) {}
 
@@ -28,7 +30,10 @@ export class UserService {
   }
 
   registerUser(user: IAppUser): Observable<any> {
-    return this.http.post('/user', user);
+    const body = JSON.stringify(user);
+    return this.http.post('/user', body, {headers: this.headers})
+      .map((res: Response) => res.json())
+      .catch((err: Response) => Observable.throw(err.json()));
   }
 
   updateUserDetails(user: IAppUser): Observable<any> {
@@ -36,7 +41,7 @@ export class UserService {
   }
 
   updateAuthDetails(user: IAppUser): Observable<any> {
-    return this.http.patch('/user/sensitive', user);
+    return this.http.put('/user/sensitive', user);
   }
 
   loginUser(email: string, password: string): Observable<any> {
