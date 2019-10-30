@@ -30,7 +30,7 @@
     "express-session": "^1.15.5",
     "jsonwebtoken": "^8.0.1",
     "mongodb": "^2.2.31",
-    "mongoose": "^4.11.10",
+    "mongoose": "^5.7.7",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
     "rxjs": "^5.4.2",
